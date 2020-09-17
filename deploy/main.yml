@@ -1,0 +1,16 @@
+# 使用 ansible-playbook 脚本化项目部署
+---
+- hosts: localhost
+  vars:
+    - NETWORK_NAME: gorilla
+    - PROJECT_NAME: eureka-server
+  tasks:
+    - name: build dockerfile
+      template: 
+        src: ../Dockerfile
+        dest: ../DockerfileTemp
+    - name: build docker image
+      command: docker build -t {{ PROJECT_NAME }} -f ../DockerfileTemp ..
+    - name: run docker container
+      command: docker run -p 8081:8081 --name {{ PROJECT_NAME }} --network {{ NETWORK_NAME }} {{ PROJECT_NAME }}
+

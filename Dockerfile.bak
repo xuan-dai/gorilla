@@ -7,7 +7,7 @@ FROM primetoninc/jdk:1.8
 USER root
 WORKDIR /opt/developer
 
-COPY {{ PROJECT_NAME }}/target/{{ PROJECT_NAME }}-0.0.1-SNAPSHOT.jar {{ PROJECT_NAME }}/{{ PROJECT_NAME  }}.jar
+COPY ../{{ PROJECT_NAME }}/target/{{ PROJECT_NAME }}-0.0.1-SNAPSHOT.jar {{ PROJECT_NAME }}/{{ PROJECT_NAME  }}.jar
 
 EXPOSE 8081
 
