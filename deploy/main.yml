@@ -4,13 +4,22 @@
   vars:
     - NETWORK_NAME: gorilla
     - PROJECT_NAME: eureka-server
+    - IMAGE_NAME: daixuan429/gorilla-eureka-server
   tasks:
     - name: build dockerfile
       template: 
         src: ../Dockerfile
         dest: ../DockerfileTemp
+    - name: mvn package
+      command: mvn clean package -Dmaven.test.skip
+      args:
+        chdir: ../{{ PROJECT_NAME }}
     - name: build docker image
-      command: docker build -t {{ PROJECT_NAME }} -f ../DockerfileTemp ..
-    - name: run docker container
-      command: docker run -p 8081:8081 --name {{ PROJECT_NAME }} --network {{ NETWORK_NAME }} {{ PROJECT_NAME }}
-
+      command: docker build -t {{ IMAGE_NAME }} -f ../DockerfileTemp ..
+    - name: delete DockerfileTemp
+      file: 
+        path: ../DockerfileTemp
+        state: absent
+    - debug: var=result
+    - name: docker run
+      command: docker run -p 8081:8081 --name {{ PROJECT_NAME }} --network {{ NETWORK_NAME }} -d {{ IMAGE_NAME }}
